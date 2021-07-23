@@ -3,14 +3,9 @@ const { promises: fs } = require('fs');
 const path = require('path');
 const os = require('os');
 
-let NSFW = null;
-if (os.platform() === 'win32') {
-  NSFW = require('./win32/nsfw.node');
-} else if (os.platform() === 'linux') {
-  NSFW = require('./linux/nsfw.node');
-} else if (os.platform() === 'darwin') {
-  NSFW = require('./darwin/nsfw.node');
-}
+const arch = process.arch.startsWith('arm') ? `-${process.arch}` : '';
+// eslint-disable-next-line import/no-dynamic-require
+const NSFW = require(`./${os.platform()}/nsfw${arch}.node`);
 
 function NSFWFilePoller(watchPath, eventCallback, debounceMS) {
   const { CREATED, DELETED, MODIFIED } = nsfw.actions;

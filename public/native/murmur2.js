@@ -2,14 +2,8 @@
 
 const os = require('os');
 
-let addon = null;
-if (os.platform() === 'win32') {
-  addon = require('./win32/murmur2.node');
-} else if (os.platform() === 'linux') {
-  addon = require('./linux/murmur2.node');
-} else if (os.platform() === 'darwin') {
-  addon = require('./darwin/murmur2.node');
-}
+const arch = process.arch.startsWith('arm') ? `-${process.arch}` : '';
+const addon = `./${os.platform()}/murmur2${arch}.node`;
 
 const addonPromise = filePath => {
   return new Promise((resolve, reject) => {

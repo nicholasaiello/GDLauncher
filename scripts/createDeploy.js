@@ -114,7 +114,7 @@ const commonConfig = {
     files: [
       '!node_modules/**/*',
       ...(process.platform === 'linux'
-        ? ['node_modules/7zip-bin/linux/x64/7za']
+        ? [`node_modules/7zip-bin/linux/${process.arch}/7za`]
         : []),
       ...(process.platform === 'darwin'
         ? ['node_modules/7zip-bin/mac/x64/7za']
@@ -193,8 +193,8 @@ const commonConfig = {
   ...((!process.env.RELEASE_TESTING || process.platform === 'linux') && {
     linux:
       type === 'setup'
-        ? ['appimage:x64', 'zip:x64', 'deb:x64', 'rpm:x64']
-        : ['snap:x64']
+        ? ['appimage', 'zip', 'deb', 'rpm'].map(x => `${x}:${process.arch}`)
+        : [`snap:${process.arch}`]
   }),
   ...((!process.env.RELEASE_TESTING || process.platform === 'win32') && {
     win: [type === 'setup' ? 'nsis:x64' : 'zip:x64']
@@ -237,7 +237,7 @@ const main = async () => {
         `${productName}-linux-${type}.AppImage`,
         `${productName}-linux-${type}.deb`,
         `${productName}-linux-${type}.rpm`,
-        'latest-linux.yml'
+        `latest-linux-${process.arch}.yml`
       ]
     },
     portable: {

@@ -202,7 +202,7 @@ const isDev = process.env.NODE_ENV === 'development';
 async function extract7z() {
   const baseDir = path.join(app.getAppPath(), 'node_modules', '7zip-bin');
 
-  let zipLocationAsar = path.join(baseDir, 'linux', 'x64', '7za');
+  let zipLocationAsar = path.join(baseDir, 'linux', process.arch, '7za');
   if (process.platform === 'darwin') {
     zipLocationAsar = path.join(baseDir, 'mac', 'x64', '7za');
   }
